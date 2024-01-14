@@ -1,0 +1,59 @@
+#box {
+    display: flex;
+    flex-wrap: wrap;
+    height: max-content;
+    padding-bottom: 30px;
+    position: relative;
+    top: -35px;
+}
+
+.main-add-button {
+    position: relative;
+    left: 10px;
+    top: -60px;
+    border-radius: 7px;
+    width: 13%;
+    height: 35px;
+    font-size: 18px;
+    border: groove 1px rgb(216, 216, 216);
+    background-color: #9695d4;
+    color: white;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.main-add-button-grey {
+    position: relative;
+    left: 90px;
+    top: -60px;
+    border-radius: 7px;
+    width: 200px;
+    height: 35px;
+    font-size: 13px;
+    border: groove 1px black;
+    background-color: rgb(152, 152, 152);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.main-in-button {
+    position: relative;
+    left: 90px;
+    top: 75px;
+    border-radius: 7px;
+    width: 200px;
+    height: 35px;
+    font-size: 13px;
+    border: groove 1px rgb(216, 216, 216);
+    background-color: rgb(212, 212, 149);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.main-add-button:hover {
+    background-color: #7c7acc;
+}

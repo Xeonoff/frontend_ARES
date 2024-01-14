@@ -1,0 +1,26 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(315deg, rgb(53, 53, 53) 3%, rgb(89, 89, 89) 38%, rgb(148, 149, 148) 68%, rgb(212, 212, 212) 98%);
+    animation: gradient 9s ease infinite;
+    background-size: 400% 400%;
+    background-attachment: fixed;
+}
+@keyframes gradient {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+  }
+
+#header {
+    margin: 1%;
+    display: flex;
+    border-radius: 50px;
+    background-color: rgb(246, 221, 221); 
+}

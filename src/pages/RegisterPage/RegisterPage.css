@@ -1,0 +1,12 @@
+#register-button {
+    border-radius: 7px;
+    width: 200px;
+    height: 40px;
+    font-size: 18px;
+    background-image: url("/src/assets/back1.jpg");
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.registerbutton:hover{
+    transform: scale(1.05);
+}

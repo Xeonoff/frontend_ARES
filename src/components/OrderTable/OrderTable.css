@@ -1,0 +1,24 @@
+#order-table {
+    border: 2px groove black;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#order-table > .row > .order-table-col > h2,
+#order-table > .row > .order-table-col > a > h2 {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+#order-table > .row > .order-table-head > h2 {
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+#order-table > .row > .col > a {
+    text-decoration: none;
+    color: rgb(15, 103, 157);
+}

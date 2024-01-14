@@ -1,0 +1,33 @@
+#nav{
+    width: 100%;
+    background-image: url("/src/assets/back2.jpg");
+}
+
+.navbar-button {
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgb(0, 0, 0);
+    padding: 10px;
+    border-radius: 10px;
+    background-image: url("/src/assets/back1.jpg");
+    transition: transform 0.3s ease;
+}
+
+.navbar-button:hover {
+    transform: scale(1.05);
+}
+
+#disabled-cart {
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #9e9b9b;
+    background-color: rgb(152, 152, 152);
+    cursor: default;
+}

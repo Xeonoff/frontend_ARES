@@ -1,0 +1,22 @@
+#breadcrumbs {
+    list-style-type: none;
+    margin: 1%;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    background-image: url("/src/assets/back2.jpg");
+    position: static;
+    border-radius: 10px;
+}
+.breadcrumbs:hover{
+    background-color: rgb(61, 99, 53);
+}
+#textbreadcrumbs{
+    color: rgb(61, 99, 53);
+}
+.message {
+    transition: transform 0.3s ease;
+}
+.message:hover{
+    transform: scale(1.05);
+}
