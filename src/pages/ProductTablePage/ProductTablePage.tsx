@@ -13,20 +13,20 @@ import Filter from "../../components/Filter/Filter";
 
 interface Product {
     id: number,
-    full_name: string,
-    file_extension: 'jpg' | 'png',
-    status: 'A' | 'N',
-    description: string,
-    weight: string,
-    height: string,
-    bdate: string,
-    last_modified: string,
-    image: string
+    full_name : string,
+    img : string,
+    status : '1' | '0',
+    bdate : string,
+    sex : 'm' | 'f' | 'n',
+    email : string,
+    available_mem : string,
+    phone : string,
+    last_modified : string
 }
 
 interface Response {
-    RequestId: number
-    Participants: Product[]
+    SendingId: number
+    Receivers: Product[]
 }
 
 const ProductTablePage: FC = () => {
@@ -45,7 +45,7 @@ const ProductTablePage: FC = () => {
 
     const getFilteredProducts = async () => {
         try {
-            const { data } = await axios(`http://127.0.0.1:8000/participants/`, {
+            const { data } = await axios(`http://127.0.0.1:8000/receivers/`, {
                 method: "GET",
                 headers: {
                     'authorization': session_id
@@ -63,7 +63,7 @@ const ProductTablePage: FC = () => {
 
     const deleteProduct = async (id: number) => {
         try {
-            await axios(`http://localhost:8000/participants/${id}/`, {
+            await axios(`http://localhost:8000/receivers/${id}/`, {
                 method: "DELETE",
                 headers: {
                     'authorization': session_id
@@ -86,12 +86,12 @@ const ProductTablePage: FC = () => {
 
     const getTransformedData = () => {
         let result: any = []
-        response?.Participants.map((participant) => {
+        response?.Receivers.map((receiver) => {
             result.push({
-                id: participant.id,
-                full_name: participant.full_name,
-                status: participant.status,
-                image: participant.image
+                id: receiver.id,
+                full_name: receiver.full_name,
+                status: receiver.status,
+                img: receiver.img
             })
         })
         return result
@@ -110,10 +110,10 @@ const ProductTablePage: FC = () => {
                         setSearchValue={setSearchValue}
                         send={getFilteredProducts}
                     />
-                    <button className="create-product-button" onClick={() => navigate(`/products/create`)}>Создать участника</button>
+                    <button className="create-product-button" onClick={() => navigate(`/products/create`)}>Новый получатель</button>
                 </Col>
                 <ProductTable
-                    participants={getTransformedData()}
+                    receivers={getTransformedData()}
                     deleteProduct={deleteProduct}
                 />
             </Row>

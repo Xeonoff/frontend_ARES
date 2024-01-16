@@ -54,8 +54,8 @@ const OrderPage: FC = () => {
             console.log(response.data)
         } catch (error) {
             console.log(error)
-            resetButton()
             navigate('/products')
+            resetButton()
         }
         
     }
@@ -147,13 +147,13 @@ const OrderPage: FC = () => {
         <Container>
             <Row>
                 {data && data.status == 'I' ? <Breadcrumbs pages={[ { link: `/orders`, title: `мои отправки` }, { link: `/orders/${id}`, title: `текущая отправка` } ]} /> :
-                data && <Breadcrumbs pages={[ { link: `/orders`, title: `мои заказы` }, { link: `/orders/${id}`, title: `Заказ №${data.id} от ${data.sent?.slice(0, 10)}` } ]} /> }
+                data && <Breadcrumbs pages={[ { link: `/orders`, title: `мои отправки` }, { link: `/orders/${id}`, title: `Отправка №${data.id} от ${data.sent?.slice(0, 10)}` } ]} /> }
             </Row>
             <Container id="cart-page" style={{ marginLeft: "30px" }}>
                 <Row style={{ display: "flex" }}>
                     <Col style={{ width: "60%" }}>
                         {data && data.status == 'I' && <h1 className="cart-main-text">Вы добавили:</h1>}
-                        {data && data.status != 'I' && <h1 className="cart-main-text" style={{ color: `${getStatusColor(getTextStatus(data.status))}` }}>{`Заказ №${data.id} от ${data.sent?.slice(0, 10)}: ${getTextStatus(data.status)}`}</h1>}
+                        {data && data.status != 'I' && <h1 className="cart-main-text" style={{ color: `${getStatusColor(getTextStatus(data.status))}` }}>{`Отправка №${data.id} от ${data.sent?.slice(0, 10)}: ${getTextStatus(data.status)}`}</h1>}
                     </Col>
                     {data && data.status == 'I' && <Col style={{ display: "flex", marginTop: "22px" }}>
                         <button className="send-button" onClick={sendCart}>Отправить</button>
@@ -170,14 +170,14 @@ const OrderPage: FC = () => {
                         return (
                             <div>
                                 <button className="remove-button" onClick={() => {deleteFromCart(product.id)}}>✖️</button>
-                                <ProductCardWithCount key={product.id} id={product.id} full_name={product.full_name} img={product.img} is_contact={pos.is_contact} getData={getData}/>
+                                <ProductCardWithCount key={product.id} id={product.id} full_name={product.full_name} img={product.img} is_contact={pos.is_contact} buttonStatus = {true} getData={getData}/>
                             </div>
                         )}
                     ) : data && data.positions.map((pos: Position)  => {
                         const product = pos.receiver_data
                         console.log(pos.is_contact)
                         return (
-                            <ProductCardWithCount key={product.id} id={product.id} full_name={product.full_name} img={product.img} is_contact={pos.is_contact} getData={getData}/>
+                            <ProductCardWithCount key={product.id} id={product.id} full_name={product.full_name} img={product.img} is_contact={pos.is_contact} buttonStatus = {false} getData={getData}/>
                         )}
                     )}
                 </Row>

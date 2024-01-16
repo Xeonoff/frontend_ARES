@@ -1,0 +1,63 @@
+#product-form > .row > .col {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#product-form > .row > .col > .row {
+    display: flex;
+    padding-bottom: 15px;
+}
+
+#product-form > .row > .col > .row > h2 {
+    color:rgb(19, 113, 35);
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+textarea {
+    width: 100%;        /* Ширина поля ввода */
+    height: 150px;      /* Высота поля ввода */
+    padding: 10px;      /* Внутренние отступы поля ввода */
+    font-size: 16px;    /* Размер текста внутри поля ввода */
+    border: 1px solid #ccc;    /* Граница поля ввода */
+    border-radius: 4px; /* Закругление углов границы поля ввода */
+    box-sizing: border-box; /* Убедитесь, что padding и border включены в ширину и высоту */
+    resize: vertical;   /* Разрешить изменение размера только по вертикали */
+}
+#product-form > .row > .col > .row > input,
+#product-form > .row > .col > .row > select,
+#product-form > .row > .col > .row > textarea {
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.left-column {
+    width: 50%;
+}
+
+#product-form-submit-button {
+    margin-top: 30px;
+    transform: translateX(-50%);
+    margin-left: 50%;
+    border: 2px solid black;
+    border-radius: 7px;
+    background-color: #9695d4;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    width: 150px;
+    height: 40px;
+}
+
+#product-form-submit-button:hover {
+    background-color: #7c7acc;
+}

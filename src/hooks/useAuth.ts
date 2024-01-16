@@ -51,9 +51,9 @@ export function useAuth() {
 
             const data = {
                 is_authenticated: true,
-                is_moderator: response.data["is_moder"],
+                is_moderator: response.data["is_moderator"],
                 user_id: response.data["id"],
-                username: response.data["login"],
+                username: response.data["username"],
             }
 
             setUser(data)
@@ -75,9 +75,9 @@ export function useAuth() {
         if (response.status == 200) {
             const data = {
                 is_authenticated: true,
-                is_moderator: response.data["is_moder"],
+                is_moderator: response.data["is_moderator"],
                 user_id: response.data["id"],
-                username: response.data["login"],
+                username: response.data["username"],
             }
 
             setUser(data)

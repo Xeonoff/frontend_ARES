@@ -8,31 +8,31 @@ import ImageWrapper from '../ImageWrapper/ImageWrapper'
 
 interface ProductTableItem {
     id: number,
-    full_name: string,
-    file_extension: 'jpg' | 'png',
-    status: 'A' | 'N',
-    description: string,
-    weight: string,
-    height: string,
-    bdate: string,
-    last_modified: string,
-    image: string
+    full_name : string,
+    status : '1' | '0',
+    bdate : string,
+    sex : 'm' | 'f' | 'n',
+    email : string,
+    available_mem : string,
+    phone : string,
+    last_modified : string,
+    img: string
 }
 
 interface Props {
-    participants: ProductTableItem[]
+    receivers: ProductTableItem[]
     deleteProduct: (id: number) => Promise<any>
 }
 
-const ProductTable: FC<Props> = ({ participants, deleteProduct }) => {
+const ProductTable: FC<Props> = ({ receivers, deleteProduct }) => {
     const navigate = useNavigate()
 
-    const getTextStatus = (participant: ProductTableItem) => {
-        return (participant.status == 'A' ? 'активен' : 'удалён')
+    const getTextStatus = (receiver: ProductTableItem) => {
+        return (receiver.status == '1' ? 'активен' : 'удалён')
     }
 
-    const getStatusColor = (status: 'A' | 'N') => {
-        if (status == 'N'){
+    const getStatusColor = (status: '1' | '0') => {
+        if (status == '0'){
             return "rgb(237, 104, 137)"
         }
     }
@@ -40,24 +40,25 @@ const ProductTable: FC<Props> = ({ participants, deleteProduct }) => {
     return (
         <Container id="product-table" style={{ marginTop: "30px", marginBottom: "50px", width: "95%", marginLeft: "1%" }}>
             <Row className="product-table-header" style={{ display: "flex", padding: "15px" }}>
-                <Col className="product-table-head" style={{ width: "20%" }}><h2>ФИО</h2></Col>
-                <Col className="product-table-head" style={{ width: "13%" }}><h2>Статус</h2></Col>
-                <Col className="product-table-head" style={{ width: "28%" }}><h2>Картинка</h2></Col>
-                <Col className="product-table-head" style={{ width: "13%" }}><h2>Действия</h2></Col>
+                <Col className="product-table-head" style={{ width: "25%" }}><h2>Имя</h2></Col>
+                <Col className="product-table-head" style={{ width: "25%" }}><h2>Статус</h2></Col>
+                <Col className="product-table-head" style={{ width: "25%" }}><h2>Картинка</h2></Col>
+                <Col className="product-table-head" style={{ width: "25%" }}><h2>Действия</h2></Col>
             </Row>
-            {participants.map((participant, index) => (
-                <Row className="product-table-row" key={index} style={{ display: "flex", padding: "15px", backgroundColor: `${getStatusColor(participant.status)}`, borderTop: "2px groove black" }}>
-                    <Col className="product-table-col" style={{ width: "20%" }}><h2>{participant.full_name}</h2></Col> 
-                    <Col className="product-table-col" style={{ width: "13%", display: "flex", flexDirection: "column" }}>
-                        <h2>{getTextStatus(participant)}</h2>
-                        {participant.status == 'N' ?
-                        <button className="activate-product-button" onClick={() => deleteProduct(participant.id)}>Вернуть</button> :
-                        <button className="delete-product-button" onClick={() => deleteProduct(participant.id)}>Удалить</button>}
+            {receivers.map((receiver, index) => (
+                <Row className="product-table-row" key={index} style={{ display: "flex", padding: "15px", backgroundColor: `${getStatusColor(receiver.status)}`, borderTop: "2px groove black" }}>
+                    <Col className="product-table-col" style={{ width: "25%" }}><h2>{receiver.full_name}</h2></Col> 
+                    <Col className="product-table-col" style={{ width: "25%", display: "flex", flexDirection: "column" }}>
+                        <h2>{getTextStatus(receiver)}</h2>
+                        {receiver.status == '0' ?
+                        <button className="activate-product-button" onClick={() => deleteProduct(receiver.id)}>Вернуть</button> :
+                        <button className="delete-product-button" onClick={() => deleteProduct(receiver.id)}>Удалить</button>}
                     </Col>
-                    <Col className="product-table-col" style={{ width: "28%" }}><div><ImageWrapper className="product-table-image" src={participant.image} based="/default.jpg" /></div></Col>
-                    <Col className="product-table-col" style={{ width: "13%", display: "flex", flexDirection: "column" }}>
-                        <a href={`/products/${participant.id}`}><h2>посмотреть</h2></a>
-                        <button className="update-product-button" onClick={() => navigate(`/products/${participant.id}/update`)}>Изменить</button>
+                    {console.log(receivers)}
+                    <Col className="product-table-col" style={{ width: "25%" }}><div><ImageWrapper className="product-table-image" src={receiver.img} based="/default.jpg" /></div></Col>
+                    <Col className="product-table-col" style={{ width: "25%", display: "flex", flexDirection: "column" }}>
+                        <a style={{textDecoration: "none", color: "black"}} href={`/products/${receiver.id}`}><h2>посмотреть</h2></a>
+                        <button className="update-product-button" onClick={() => navigate(`/products/${receiver.id}/update`)}>Изменить</button>
                     </Col>
                 </Row>
             ))}

@@ -1,17 +1,15 @@
-import { FC, useEffect, useState } from "react"
+import { FC} from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/useAuth"
 
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs"
-import Loader from '../../components/Loader/Loader.tsx';
 
 import { Container, Row, Col, Card } from "react-bootstrap"
 import "./LoginPage.css"
 
 
 const LoginPage: FC = () => {
-    const [ loading, setLoading ] = useState<boolean> (true)
-    const { login, auth } = useAuth()
+    const { login} = useAuth()
     const navigate = useNavigate()
 
     const handleLogin = async (e: any) => {
@@ -19,28 +17,11 @@ const LoginPage: FC = () => {
         const formData = new FormData(e.target as HTMLFormElement)
         const flag = await login(formData)
         if (flag) {
-            navigate("/products")
+            navigate("/")
         }
     }
-
-    const handleAuth  = async () => {
-        const flag = await auth()
-        if (flag) {
-            navigate("/products")
-        }
-    }
-
-    useEffect(() => {
-        handleAuth().then(() => {
-            setLoading(false)
-        }).catch((error) => {
-            console.log(error)
-            setLoading(false)
-        })
-    }, []);
 
     return (
-        <> {loading ? <Loader /> :
         <Container>
             <Row>
                 {<Breadcrumbs pages={[ { link: `/login`, title: "Вход" } ]} />}
@@ -80,7 +61,6 @@ const LoginPage: FC = () => {
                 </Card>
             </Row>
         </Container>
-        }</>
     )
 }
 
