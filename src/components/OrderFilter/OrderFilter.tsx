@@ -55,7 +55,7 @@ const OrderFilter: FC<Props> = ({ P, setP, A, setA, W, setW, startDate, setStart
         <Container>
             <Row>
                 <h3 style={{ color: "rgb(19, 113, 35)", fontSize: "24px", fontWeight: "500" }}>
-                    Какие заявка показывать?
+                    Какие отправки показывать?
                 </h3>
                 <Container style={{ display: "flex", gap: "20px", position: "relative", top: "-30px" }}>
                     <label style={{ display: "flex", gap: "5px" }}>

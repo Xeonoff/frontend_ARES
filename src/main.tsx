@@ -10,7 +10,7 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.tsx";
 import OrderListPage from "./pages/OrderListPage/OrderListPage.tsx";
 import OrderPage from "./pages/OrderPage/OrderPage.tsx";
-import ProductUpdatePage from "./pages/ProductUpdatePage/ProductUpdatePage.tsx";
+import ProductUpdatePage from "./pages/ProductUpdatePage/ProductupdatePage.tsx";
 import ProductTablePage from "./pages/ProductTablePage/ProductTablePage.tsx";
 
 import Navbar from "./components/Navbar/Navbar.tsx";

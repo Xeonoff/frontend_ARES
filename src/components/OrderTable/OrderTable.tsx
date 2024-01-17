@@ -35,20 +35,31 @@ const getStatusColor = (status: string) => {
 const OrderTable: FC<Props> = ({ requests, is_moderator, processStatusUpdate }) => {
     return (
         <Container id="order-table" style={{ marginTop: "20px", marginBottom: "50px", width: "100%", position: "relative"}}>
-            <Row className="order-table-header" style={{ display: "flex", padding: "15px" }}>
-                <Col className="order-table-head" style={{ width: "10%" }}><h2>Номер</h2></Col>
-                <Col className="order-table-head" style={{ width: "18%" }}><h2>Пользователь</h2></Col>
-                <Col className="order-table-head" style={{ width: "15%" }}><h2>Создано</h2></Col>
-                <Col className="order-table-head" style={{ width: "15%" }}><h2>Отправлено</h2></Col>
-                <Col className="order-table-head" style={{ width: "15%" }}><h2>Завершено</h2></Col>
-                <Col className="order-table-head" style={{ width: "20%" }}><h2>Статус рассмотрения</h2></Col>
-                <Col className="order-table-head" style={{ width: "15%" }}><h2>Статус отправки</h2></Col>
+            {is_moderator && is_moderator === true? 
+            <Row className="order-table-header" style={{ display: "flex", backgroundImage:"url('/src/assets/back1.jpg')"}}>
+                <Col className="order-table-head" style={{ width: "10%", borderRight:"solid"}}><h2>Номер</h2></Col>
+                <Col className="order-table-head" style={{ width: "18%", borderRight:"solid" }}><h2>Пользователь</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%", borderRight:"solid" }}><h2>Создано</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%", borderRight:"solid" }}><h2>Отправлено</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%", borderRight:"solid" }}><h2>Завершено</h2></Col>
+                <Col className="order-table-head" style={{ width: "20%", borderRight:"solid" }}><h2>Статус рассмотрения</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%", borderRight:"solid" }}><h2>Статус отправки</h2></Col>
                 <Col className="order-table-head" style={{ width: "15%" }}><h2>Ссылка</h2></Col> 
             </Row>
+            : 
+            <Row className="order-table-header" style={{ display: "flex", padding: "15px" }}>
+                <Col className="order-table-head" style={{ width: "10%" }}><h2>Номер</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%" }}><h2>Создано</h2></Col>
+                <Col className="order-table-head" style={{ width: "18%" }}><h2>Сформировано</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%" }}><h2>Завершено</h2></Col>
+                <Col className="order-table-head" style={{ width: "20%" }}><h2>Статус рассмотрения</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%" }}><h2>Итог соревнований</h2></Col>
+                <Col className="order-table-head" style={{ width: "10%" }}><h2>Ссылка</h2></Col>
+            </Row>}
             {requests.map((request) => (
                 <Row className="order-table-row" key={request.pk} style={{ display: "flex", padding: "10px", backgroundColor: `${getStatusColor(request.status)}`, borderTop: "2px groove black" }}>
                     <Col className="order-table-col" style={{ width: "10%" }}><h2>{request.pk}</h2></Col> 
-                    <Col className="order-table-col" style={{ width: "18%" }}><h2>{request.username}</h2></Col> 
+                    {is_moderator === true && <Col className="order-table-col" style={{ width: "18%" }}><h2>{request.username}</h2></Col>}
                     <Col className="order-table-col" style={{ width: "15%" }}><h2>{request.created}</h2></Col>
                     <Col className="order-table-col" style={{ width: "15%" }}><h2>{request.send}</h2></Col>
                     <Col className="order-table-col" style={{ width: "15%" }}><h2>{request.closed}</h2></Col>

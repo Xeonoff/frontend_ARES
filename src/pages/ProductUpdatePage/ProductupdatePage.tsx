@@ -144,12 +144,12 @@ const ProductUpdatePage: FC = () => {
             <form onSubmit={handleSubmit}>
                 <Container id="product-form">
                     <Row style={{ display: "flex" }}>
-                        <Col id="product-form-main" style={{ width: "36%" }}>
+                        <Col id="product-form-main" style={{ width: "48%" }}>
                             <Row>
                                 <h2>Основные данные</h2>
                             </Row>
                             <Row>
-                                <div className="left-column"><label htmlFor="title">ФИО</label></div>
+                                <div className="left-column"><label htmlFor="title">Имя</label></div>
                                 <textarea
                                     id="full_name"
                                     name="full_name"
@@ -191,23 +191,24 @@ const ProductUpdatePage: FC = () => {
                                     required
                                 />
                             </Row>
-                        </Col>
-                        <Col id="product-form-params" style={{ width: "36%" }}>
                             <Row>
-                                <h2>{'Описание (необязательно)'}</h2>
+                                <h2>{'Пол (необязательно)'}</h2>
                             </Row>
                             <Row>
                                 <div className="left-column"><label htmlFor="param_sex">Пол</label></div>
-                                <input
+                                <select
                                     id="sex"
                                     name="sex"
                                     value={values.sex}
                                     onChange={handleChange}
-                                    style = {{width:"1000px", height: "100px"}}
-                                />
+                                ><option value={values.sex}>{values.sex}</option>
+                                <option value="m">m</option>
+                                <option value="f">f</option>
+                                <option value="n">n</option>
+                                </select>
                             </Row>
                         </Col>
-                        <Col id="product-form-image" style={{ width: "28%" }}>
+                        <Col id="product-form-image" style={{ width: "48%" }}>
                             <Row>
                                 <h2>Изображение</h2>
                             </Row>

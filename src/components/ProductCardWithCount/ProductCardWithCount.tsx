@@ -48,9 +48,9 @@ const ProductCardWithCount: FC<ProductCardData> = ({ id, full_name, img, is_cont
                 <button className='cardStatusGreen' style = {{marginTop: '25px', marginRight: '200px'}} onClick= {handleButtonClick}>Изменить в контактах</button>
             </div>
             }
-            <div style = {{marginTop: '-20px'}}>
+            <div>
                 <span>
-                    {is_contact? "Это ваш контакт": "Нет в списке контактов"}
+                    {is_contact? "Есть в контактах": "Нет в списке контактов"}
                 </span>
             </div>
         </Card>

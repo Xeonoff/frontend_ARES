@@ -189,11 +189,11 @@ const OrderListPage: FC = () => {
         <> {loading ? <Loader /> :
         <Container>
             <Row>
-                <Breadcrumbs pages={[ { link: `/orders`, title: `мои отправки` } ]} />
+                <Breadcrumbs pages={[ { link: `/orders`, title: (is_moderator ? 'отправки пользователей' : 'мои отправки') } ]} />
             </Row>
             <Row style={{ display: "flex" }}>
                 <Col style={{ width: "35%" }}>
-                    <h1 className="cart-main-text" style={{ marginTop: "30px", marginLeft: "30px" }}>Список ваших отправок: </h1>
+                    <h1 className="cart-main-text" style={{ marginTop: "30px", marginLeft: "30px" }}>{is_moderator ? 'Отправки пользователей' : 'Список ваших отправок'}: </h1>
                 </Col>
                 <Col style={{ width: "25%" }}></Col>
                 <Col style={{ width: "40%" }}>

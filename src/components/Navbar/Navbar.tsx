@@ -19,13 +19,13 @@ const Navbar: FC = () => {
 
     const getGuestNavbar = () => (
         <Row id="navbar-row" style={{ display: "flex", marginTop: "47px" }}>
-            <Col style={{ width: "75%", marginLeft: "30px", marginTop: "-3px" }}>
+            <Col style={{ width: "80%", marginLeft: "30px", marginTop: "-3px" }}>
                 <a className="navbar-button" href="/">👥</a>
             </Col>
-            <Col style={{ width: "15%", marginLeft: "30px" }}>
+            <Col style={{ width: "20%", marginLeft: "30px" }}>
                 <a className="navbar-button" href="/register">Регистрация</a>
             </Col>
-            <Col style={{ width: "10%", marginLeft: "30px" }}>
+            <Col style={{ width: "20%", marginLeft: "30px" }}>
                 <a className="navbar-button" href="/login">Вход</a>
             </Col>
         </Row>
@@ -53,7 +53,7 @@ const Navbar: FC = () => {
             <Col style={{ width: "10%", marginLeft: "30px", marginTop: "-3px" }}>
                 <a className="navbar-button" href="/">👥</a>
             </Col>
-            <Col style={{ width: "40%", marginLeft: "30px" }}>
+            <Col style={{ width: "70%", marginLeft: "30px" }}>
                 <a className="navbar-button" href="/orders">Отправки</a>
             </Col>
             <Col style={{ width: "40%", marginLeft: "30px" }}>

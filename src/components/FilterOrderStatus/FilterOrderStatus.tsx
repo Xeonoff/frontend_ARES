@@ -32,7 +32,7 @@ const FilterOrderStatus: FC<FilterByStatusProps> = ({ state, handleFilterChange 
         <Container>
             <Row>
                 <h3 style={{ color: "rgb(19, 113, 35)", fontSize: "24px", fontWeight: "500" }}>
-                    Какие заявки показывать?
+                    Какие отправки показывать?
                 </h3>
                 <Container style={{ display: "flex", gap: "20px", position: "relative", top: "-10px" }}>
                     <label style={{ display: "flex", gap: "5px" }}>
