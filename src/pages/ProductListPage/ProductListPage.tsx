@@ -41,7 +41,7 @@ const ProductListPage: FC = () => {
         Receivers: [],
     })
     //@ts-ignore
-    const { searchValue, setSearchValue} = useState<string> (useStore().getState().productFilter.searchValue)
+    const [ searchValue, setSearchValue] = useState<string> (useStore().getState().productFilter.searchValue)
 
     const { session_id } = useSsid()
     const { is_authenticated, is_moderator } = useAuth()
@@ -66,6 +66,7 @@ const ProductListPage: FC = () => {
                 setResponse(data)
                 dispatch(updateSearchValue(searchValue))
             } catch (error) {
+                console.log(searchValue)
                 setResponse(getDefaultResponse(3, searchValue))
             }
     }

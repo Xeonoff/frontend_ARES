@@ -15,8 +15,8 @@ interface Product {
 }
 
 interface Response {
-    RequestId: number
-    Participants: Product[]
+    SendingId: number
+    Receivers: Product[]
 }
 
 const defaultProduct = (id: number): Product => {
@@ -47,7 +47,7 @@ const getDefaultProductList = (count: number, searchValue: string): Product[] =>
 
 export const getDefaultResponse = (count: number, searchValue: string): Response => {
     return {
-        RequestId: -1,
-        Participants: getDefaultProductList(count, searchValue)
+        SendingId: -1,
+        Receivers: getDefaultProductList(count, searchValue)
     }
 }
