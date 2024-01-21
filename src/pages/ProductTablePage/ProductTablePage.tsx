@@ -10,6 +10,7 @@ import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import ProductTable from "../../components/ProductTable/ProductTable";
 import { useNavigate } from "react-router-dom";
 import Filter from "../../components/Filter/Filter";
+import { updateSearchValue } from '../../store/productFilterSlice.ts';
 
 interface Product {
     id: number,
@@ -56,6 +57,7 @@ const ProductTablePage: FC = () => {
                 signal: AbortSignal.timeout(1000)
             })
             setResponse(data)
+            dispatch(updateSearchValue(searchValue))
         } catch (error) {
             setResponse(getDefaultResponse(3, searchValue))
         }

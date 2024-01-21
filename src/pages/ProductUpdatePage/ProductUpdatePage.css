@@ -45,13 +45,12 @@ textarea {
     margin-top: 30px;
     transform: translateX(-50%);
     margin-left: 50%;
-    border: 2px solid black;
     border-radius: 7px;
-    background-color: #9695d4;
-    color: white;
+    border: 0px solid #ccc;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
     font-size: 16px;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 2px;
     text-align: center;
     width: 150px;
@@ -59,5 +58,5 @@ textarea {
 }
 
 #product-form-submit-button:hover {
-    background-color: #7c7acc;
+    background-color: rgb(220, 220, 220);
 }

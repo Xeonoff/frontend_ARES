@@ -46,7 +46,7 @@ const ProductTable: FC<Props> = ({ receivers, deleteProduct }) => {
                 <Col className="product-table-head" style={{ width: "25%" }}><h2>Действия</h2></Col>
             </Row>
             {receivers.map((receiver, index) => (
-                <Row className="product-table-row" key={index} style={{ display: "flex", padding: "15px", backgroundColor: `${getStatusColor(receiver.status)}`, borderTop: "2px groove black" }}>
+                <Row className="product-table-row" key={receiver.id} style={{ display: "flex", padding: "15px", backgroundColor: `${getStatusColor(receiver.status)}`, borderTop: "2px groove black" }}>
                     <Col className="product-table-col" style={{ width: "25%" }}><h2>{receiver.full_name}</h2></Col> 
                     <Col className="product-table-col" style={{ width: "25%", display: "flex", flexDirection: "column" }}>
                         <h2>{getTextStatus(receiver)}</h2>
@@ -54,7 +54,6 @@ const ProductTable: FC<Props> = ({ receivers, deleteProduct }) => {
                         <button className="activate-product-button" onClick={() => deleteProduct(receiver.id)}>Вернуть</button> :
                         <button className="delete-product-button" onClick={() => deleteProduct(receiver.id)}>Удалить</button>}
                     </Col>
-                    {console.log(receivers)}
                     <Col className="product-table-col" style={{ width: "25%" }}><div><ImageWrapper className="product-table-image" src={receiver.img} based="/default.jpg" /></div></Col>
                     <Col className="product-table-col" style={{ width: "25%", display: "flex", flexDirection: "column" }}>
                         <a style={{textDecoration: "none", color: "black"}} href={`/products/${receiver.id}`}><h2>посмотреть</h2></a>

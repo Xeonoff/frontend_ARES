@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link} from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import HeadTitle from '../HeadTitle/HeadTitle.tsx';
 import CartButton from '../../components/CartButton/CartButton.tsx';
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col} from 'react-bootstrap'
 import "./Navbar.css"
 import { useSelector } from 'react-redux';
 
@@ -18,46 +18,44 @@ const Navbar: FC = () => {
     }
 
     const getGuestNavbar = () => (
-        <Row id="navbar-row" style={{ display: "flex", marginTop: "47px" }}>
-            <Col style={{ width: "80%", marginLeft: "30px", marginTop: "-3px" }}>
-                <a className="navbar-button" href="/">👥</a>
+        <Row id="navbar-row" style={{ display: "flex", marginTop: "40px" }}>
+            <Col style={{ width: "70%", marginLeft: "30px", fontSize:"28px"}}>
+                <Link className="navbar-button" to="/">👥</Link>
             </Col>
-            <Col style={{ width: "20%", marginLeft: "30px" }}>
-                <a className="navbar-button" href="/register">Регистрация</a>
-            </Col>
-            <Col style={{ width: "20%", marginLeft: "30px" }}>
-                <a className="navbar-button" href="/login">Вход</a>
+            <Col style={{ flex: 1, marginLeft: "30px", display: "flex",flexDirection: "column", alignItems: "flex-start", textAlign: "center", marginRight: "2px", marginBottom: "2px"}}>
+                <Link className="navbar-button" to="/login" style={{ width: "90%", marginBottom: "3px"}}>Вход</Link>
+                <Link className="navbar-button" to="/register" style={{ width: "90%"}}>Регистрация</Link>
             </Col>
         </Row>
     )
 
     const getUserNavbar = () => (
         <Row id="navbar-row" style={{ display: "flex", marginTop: "47px" }}>
-            <Col style={{ width: "10%", marginLeft: "30px", marginTop: "-3px"}}>
-                <a className="navbar-button" href="/">👥</a>
+            <Col style={{ width: "10%", marginLeft: "30px", fontSize:"28px", marginTop: "-8px"}}>
+                <Link className="navbar-button" to="/">👥</Link>
             </Col>
-            <Col style={{ width: "20%", marginLeft: "30px" }}>
+            <Col style={{ width: "20%", marginLeft: "30px", fontSize: "18px" }}>
                 {is_authenticated && <CartButton CurrentID={ CurrentID } />}
             </Col>
             <Col style={{ width: "40%", marginLeft: "30px" }}>
-                <a className="navbar-button" href="/orders">Отправки</a>
+                <Link className="navbar-button" to="/orders">Отправки</Link>
             </Col>
-            <Col style={{ width: "40%", marginLeft: "30px" }}>
-                <a className="navbar-button" href="#" onClick={ handleLogout }>{`${username}: выход`}</a>
+            <Col style={{ width: "30%", marginLeft: "30px" }}>
+                <Link className="navbar-button" to="#" onClick={ handleLogout }>{`${username}: выход`}</Link>
             </Col>
         </Row>
     )
 
     const getModerNavbar = () => (
         <Row id="navbar-row" style={{ display: "flex", marginTop: "47px" }}>
-            <Col style={{ width: "10%", marginLeft: "30px", marginTop: "-3px" }}>
-                <a className="navbar-button" href="/">👥</a>
+            <Col style={{ width: "10%", marginLeft: "30px", fontSize:"24px", marginTop: "-6px" }}>
+                <Link className="navbar-button" to="/">👥</Link>
             </Col>
             <Col style={{ width: "70%", marginLeft: "30px" }}>
-                <a className="navbar-button" href="/orders">Отправки</a>
+                <Link className="navbar-button" to="/orders">Отправки</Link>
             </Col>
-            <Col style={{ width: "40%", marginLeft: "30px" }}>
-                <a className="navbar-button" href="#" onClick={ handleLogout }>{`${username}: выход`}</a>
+            <Col style={{ width: "30%", marginLeft: "30px" }}>
+                <Link className="navbar-button" to="#" onClick={ handleLogout }>{`${username}: выход`}</Link>
             </Col>
         </Row>
     )
