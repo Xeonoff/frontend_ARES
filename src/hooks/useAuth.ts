@@ -21,7 +21,7 @@ export function useAuth() {
 
     const logout = async () => {
         try {
-            const response = await axios(`http://localhost:8000/accounts/logout/`, {
+            const response = await axios(`/api/accounts/logout/`, {
                 method: "POST",
                 headers: {
                     'authorization': session_id
@@ -38,7 +38,7 @@ export function useAuth() {
     }
 
     const login = async (formData: any) => {
-        const response = await axios(`http://127.0.0.1:8000/accounts/login/`, {
+        const response = await axios(`/api/accounts/login/`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -64,7 +64,7 @@ export function useAuth() {
 
 
     const auth = async () => {
-        const response = await axios(`http://localhost:8000/accounts/check/`, {
+        const response = await axios(`/api/accounts/check/`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
@@ -87,7 +87,7 @@ export function useAuth() {
     }
 
     const register = async (formData: any) => {
-        const response = await axios(`http://localhost:8000/users/`, {
+        const response = await axios(`/api/users/`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json; charset=UTF-8"

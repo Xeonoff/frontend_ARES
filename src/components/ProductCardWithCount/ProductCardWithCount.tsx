@@ -23,7 +23,7 @@ const ProductCardWithCount: FC<ProductCardData> = ({ id, full_name, img, is_cont
       };
     const changeStatus = async (new_status: boolean) => {
         try {
-            await axios(`http://127.0.0.1:8000/links/`, {
+            await axios(`/api/links/`, {
                 method: "PUT",
                 headers: {
                     'authorization': session_id

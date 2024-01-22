@@ -29,7 +29,7 @@ const ProductPage: FC = () => {
     }
 
     const getProduct = async () => {
-        const { data } = await axios(`http://127.0.0.1:8000/receivers/${id}/`, {
+        const { data } = await axios(`/api/receivers/${id}/`, {
                 method: "GET",
                 headers: {
                     'authorization': session_id

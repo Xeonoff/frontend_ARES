@@ -78,7 +78,7 @@ const OrderListPage: FC = () => {
         try {
             console.log(`start_date = ${startDate}`)
             console.log(`end_date = ${endDate}`)
-            const { data } = await axios(`http://127.0.0.1:8000/sending/`, {
+            const { data } = await axios(`/api/sending/`, {
                 method: "GET",
                 headers: {
                     'authorization': session_id
@@ -105,7 +105,7 @@ const OrderListPage: FC = () => {
 
     const processStatusUpdate = async (id: number, new_status: 'A' | 'W') => {
         try {
-            await axios(`http://127.0.0.1:8000/sending/${id}/`, {
+            await axios(`/api/sending/${id}/`, {
                 method: "PUT",
                 headers: {
                     'authorization': session_id
@@ -135,7 +135,7 @@ const OrderListPage: FC = () => {
             return 'отправлен'
         } else if (status === 'A') {
             return 'принят'
-        } else if (status == 'D') {
+        } else if (status == 'W') {
             return 'отклонён'
         }
         return ''

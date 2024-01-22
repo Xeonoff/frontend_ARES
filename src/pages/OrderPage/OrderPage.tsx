@@ -42,7 +42,7 @@ const OrderPage: FC = () => {
     }
     const getData = async () => {
         try {
-            const response = await axios(`http://localhost:8000/sending/${id}/`, {
+            const response = await axios(`/api/sending/${id}/`, {
                 method: "GET",
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",

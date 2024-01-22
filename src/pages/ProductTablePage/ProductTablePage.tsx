@@ -46,7 +46,7 @@ const ProductTablePage: FC = () => {
 
     const getFilteredProducts = async () => {
         try {
-            const { data } = await axios(`http://127.0.0.1:8000/receivers/`, {
+            const { data } = await axios(`/api/receivers/`, {
                 method: "GET",
                 headers: {
                     'authorization': session_id
@@ -65,7 +65,7 @@ const ProductTablePage: FC = () => {
 
     const deleteProduct = async (id: number) => {
         try {
-            await axios(`http://localhost:8000/receivers/${id}/`, {
+            await axios(`/api/receivers/${id}/`, {
                 method: "DELETE",
                 headers: {
                     'authorization': session_id

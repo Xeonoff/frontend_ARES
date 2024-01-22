@@ -23,7 +23,7 @@ const ProductInfo: FC<Props> = ({id, full_name, parameters, img }) => {
     const { is_authenticated } = useAuth()
 
     const addToCart = async (participants_id: number) => {
-        await axios(`http://localhost:8000/participants/${participants_id}/`, {
+        await axios(`/api/receivers/${participants_id}/`, {
             method: "POST",
             headers: {
                 'authorization': session_id

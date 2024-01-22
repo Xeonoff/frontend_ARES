@@ -56,7 +56,7 @@ const ProductUpdatePage: FC = () => {
     !is_moderator && navigate('/products')
 
     const getProduct = async () => {
-        const response = await axios(`http://127.0.0.1:8000/receivers/${id}/`, { method: "GET" })
+        const response = await axios(`/api/receivers/${id}/`, { method: "GET" })
         setValues(toFormData(response.data))
         setUploadedImage(response.data.image)
     }
@@ -95,7 +95,7 @@ const ProductUpdatePage: FC = () => {
 
     const sendData = async () => {
         id ?
-        await axios(`http://127.0.0.1:8000/receivers/${id}/`, {
+        await axios(`/api/receivers/${id}/`, {
             method: 'PUT',
             data: values,
             headers: {
@@ -104,7 +104,7 @@ const ProductUpdatePage: FC = () => {
             }
         })
         :
-        await axios(`http://127.0.0.1:8000/receivers/`, {
+        await axios(`/api/receivers/`, {
             method: 'POST',
             data: values,
             headers: {

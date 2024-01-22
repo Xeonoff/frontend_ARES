@@ -53,7 +53,7 @@ const OrderTable: FC<Props> = ({ requests, is_moderator, processStatusUpdate }) 
                 <Col className="order-table-head" style={{ width: "18%" }}><h2>Сформировано</h2></Col>
                 <Col className="order-table-head" style={{ width: "15%" }}><h2>Завершено</h2></Col>
                 <Col className="order-table-head" style={{ width: "20%" }}><h2>Статус рассмотрения</h2></Col>
-                <Col className="order-table-head" style={{ width: "15%" }}><h2>Итог соревнований</h2></Col>
+                <Col className="order-table-head" style={{ width: "15%" }}><h2>Статус отправки</h2></Col>
                 <Col className="order-table-head" style={{ width: "10%" }}><h2>Ссылка</h2></Col>
             </Row>}
             {requests.map((request) => (
