@@ -6,10 +6,7 @@ import axios from "axios";
 import { getDefaultResponse } from '../../assets/MockObjects.ts';
 import { updateSearchValue } from '../../store/productFilterSlice.ts';
 import ProductCard from "../../components/ProductCard/ProductCard.tsx";
-import Filter from '../../components/Filter/Filter.tsx';
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.tsx';
 import Loader from '../../components/Loader/Loader.tsx';
-import { updateButton } from '../../store/buttonSlice.ts';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useStore } from 'react-redux';
 import "./ProductListPage.css";
@@ -28,17 +25,25 @@ export interface Product {
     last_modified : string
 }
 
+export interface Rule {
+    name: string;
+    content: string;
+    faculty?: string;
+    semester?: number;
+    building?: string;
+    department?: string;
+    parsed_content?: any;
+}
+
 interface Response {
-    SendingId: number,
-    Receivers: Product[]
+    Constraints: Rule[]
 }
 
 const ProductListPage: FC = () => {
     const [ loading, setLoading ] = useState<boolean> (true)
 
     const [ response, setResponse ] = useState<Response> ({
-        SendingId: -1,
-        Receivers: [],
+        Constraints: [],
     })
     //@ts-ignore
     const [ searchValue, setSearchValue] = useState<string> (useStore().getState().productFilter.searchValue)
@@ -67,16 +72,10 @@ const ProductListPage: FC = () => {
                 dispatch(updateSearchValue(searchValue))
             } catch (error) {
                 console.log(searchValue)
-                setResponse(getDefaultResponse(3, searchValue))
+                setResponse(getDefaultResponse(10))
             }
     }
 
-    useEffect(() => {
-        if (response.SendingId !== -1) {
-            dispatch(updateButton({ SendingId: response.SendingId }));
-        }
-        console.log(response.SendingId)
-    }, [response, dispatch]);
 
     useEffect(() => {
         getFilteredProducts().then(() => {
@@ -87,49 +86,24 @@ const ProductListPage: FC = () => {
         })
     }, [dispatch])
 
-    const addToCart = async (receiver_id: number) => {
-        await axios(`/api/receivers/${receiver_id}/`, {
-            method: "POST",
-            headers: {
-                'authorization': session_id
-            },
-        })
-        await getFilteredProducts()
-    }
-
     return (
         <> {loading ? <Loader /> :
         <Container>
-            <Row style={is_authenticated ? { position: 'relative', top: '-25px' } : {}}>
-                <Breadcrumbs pages={[]} />
-            </Row>
             <Row style={is_authenticated ? { display: 'flex', position: 'relative', top: '-25px' } : {display: 'flex'}}>
-                <Col style={{ width: "22%", margin: "30px" }}>
-                    <Filter
-                        searchValue={searchValue}
-                        setSearchValue={setSearchValue}
-                        send={getFilteredProducts}
-                    />
-                </Col>
                 <Col style={{ marginBottom: "30px", marginLeft: "10px" }}>
                     <div id="box">
-                        {response.Receivers.map((product: Product, index) => (
-                            is_authenticated ?
+                        {response.Constraints.map((constraint: Rule, index) => (
                             <div key = {index}>
-                                <ProductCard key={product.id.toString()}
-                                    id={product.id}
-                                    full_name={product.full_name}
-                                    img={product.img}
-                                    phone={product.phone}
+                                <ProductCard key={constraint.name}
+                                    name = {constraint.name}
+                                    content = {constraint.content}
+                                    faculty = {constraint.faculty}
+                                    semester = {constraint.semester}
+                                    building = {constraint.building}
+                                    department = {constraint.department}
+                                    parsed_content = {constraint.parsed_content}
                                 />
-                                <button onClick={() => {addToCart(product.id)}} className="main-add-button">➕</button>
-                            </div> :
-                            <ProductCard key={product.id.toString()}
-                                id={product.id}
-                                full_name={product.full_name}
-                                img={product.img}
-                                phone={product.phone}
-                            />
+                            </div> 
                         ))}
                     </div>
                 </Col>

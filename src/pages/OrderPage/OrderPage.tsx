@@ -3,7 +3,6 @@ import { Col, Container, Row } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSsid } from '../../hooks/useSsid';
 import ProductCardWithCount, { ProductCardData } from "../../components/ProductCardWithCount/ProductCardWithCount";
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import Loader from '../../components/Loader/Loader.tsx';
 import { useDispatch } from 'react-redux';
 import { cleanButton } from "../../store/buttonSlice.ts";
@@ -145,10 +144,6 @@ const OrderPage: FC = () => {
     return (
         <> {loading ? <Loader /> :
         <Container>
-            <Row>
-                {data && data.status == 'I' ? <Breadcrumbs pages={[ { link: `/orders`, title: `мои отправки` }, { link: `/orders/${id}`, title: `текущая отправка` } ]} /> :
-                data && <Breadcrumbs pages={[ { link: `/orders`, title: `мои отправки` }, { link: `/orders/${id}`, title: `Отправка №${data.id} от ${data.sent?.slice(0, 10)}` } ]} /> }
-            </Row>
             <Container id="cart-page" style={{ marginLeft: "30px" }}>
                 <Row style={{ display: "flex" }}>
                     <Col style={{ width: "60%" }}>

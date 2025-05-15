@@ -2,8 +2,6 @@ import { FC} from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/useAuth"
 
-import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs"
-
 import { Container, Row, Col, Card } from "react-bootstrap"
 import "./LoginPage.css"
 
@@ -23,9 +21,6 @@ const LoginPage: FC = () => {
 
     return (
         <Container>
-            <Row>
-                {<Breadcrumbs pages={[ { link: `/login`, title: "Вход" } ]} />}
-            </Row>
             <Row>
                 <Card style={{ width: "100%", marginRight: "30px", backgroundImage: "url('/src/assets/back1.jpg')", borderRadius: "10px"}}>
                 <Container style={{ marginLeft: "30px", marginTop: "30px" }}>

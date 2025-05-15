@@ -4,7 +4,6 @@ import { useSsid } from "../../hooks/useSsid";
 
 import { Product } from '../ProductListPage/ProductListPage'
 import ProductInfo, { Param } from '../../components/ProductInfo/ProductInfo'
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 
 import { Container, Row } from 'react-bootstrap';
 import "./ProductPage.css"
@@ -45,9 +44,6 @@ const ProductPage: FC = () => {
 
     return (
         <Container>
-            <Row>
-                {product && id && <Breadcrumbs pages={[ { link: `/products/${id}`, title: `${product.full_name}` } ]} />}
-            </Row>
             <Row>
                 {product && id && <ProductInfo id={parseInt(id)} full_name={product.full_name} parameters={parameters} img={product.img} />}
             </Row>

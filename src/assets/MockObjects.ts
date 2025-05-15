@@ -1,5 +1,14 @@
 import defaultImage from '../assets/default.jpg';
 
+interface Rule {
+    name: string;
+    content: string;
+    faculty?: string;
+    semester?: number;
+    building?: string;
+    department?: string;
+    parsed_content?: any;
+}
 
 interface Product {
     id: number,
@@ -15,8 +24,18 @@ interface Product {
 }
 
 interface Response {
-    SendingId: number
-    Receivers: Product[]
+    Constraints: Rule[]
+}
+const defaultConstraint = (name: string): Rule =>{
+    return {
+        name: name,
+        content: "\n\tСценарий: У одной группы не может быть двух занятий в одно время\n                                Дано Для пары занятий\n                                И в одно время\n                                И в одной аудитории\n                                И у одной группы\n                                То такое сочетание невозможно\n\n\t",
+        faculty: undefined,
+        semester: undefined,
+        building: undefined,
+        department: undefined,
+        parsed_content: undefined
+    }
 }
 
 const defaultProduct = (id: number): Product => {
@@ -45,9 +64,16 @@ const getDefaultProductList = (count: number, searchValue: string): Product[] =>
     return result
 }
 
-export const getDefaultResponse = (count: number, searchValue: string): Response => {
+export const getDefaultConstraintList = (count: number): Rule[] => {
+    let result = []
+    for (let i = 1; i <= count; ++i){
+        result.push(defaultConstraint("Mocked Constraint"))
+    }
+    return result
+}
+
+export const getDefaultResponse = (count: number): Response => {
     return {
-        SendingId: -1,
-        Receivers: getDefaultProductList(count, searchValue)
+        Constraints: getDefaultConstraintList(count)
     }
 }

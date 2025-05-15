@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 const Navbar: FC = () => {
     const { is_authenticated, username, is_moderator, logout } = useAuth()
     const navigate = useNavigate()
+    let mode = "light"
     //@ts-ignore
     const CurrentID = useSelector((state) => state.button.current_id);
     const handleLogout = async () => {
@@ -18,27 +19,31 @@ const Navbar: FC = () => {
     }
 
     const getGuestNavbar = () => (
-        <Row id="navbar-row" style={{ display: "flex", marginTop: "40px" }}>
-            <Col style={{ width: "70%", marginLeft: "30px", fontSize:"28px"}}>
-                <Link className="navbar-button" to="/">👥</Link>
+        <Row id="navbar-row" style={{ display: "flex", marginTop: "40px"}}>
+            <Col style={{display: "flex", width: "70%", marginLeft: "30px", fontSize:"28px", gap:"20px" }}>
+                {mode == 'light' ?
+                <a className="navbar-switch" >Подробно OFF⬛️</a> :
+                <a className="navbar-switch" >Подробно ON🟩</a> }
+                <Link className="navbar-button" to="/">Правила📑</Link>
+                <a className="navbar-button">Руководствоℹ️</a>
             </Col>
             <Col style={{ flex: 1, marginLeft: "30px", display: "flex",flexDirection: "column", alignItems: "flex-start", textAlign: "center", marginRight: "2px", marginBottom: "2px"}}>
                 <Link className="navbar-button" to="/login" style={{ width: "90%", marginBottom: "3px"}}>Вход</Link>
-                <Link className="navbar-button" to="/register" style={{ width: "90%"}}>Регистрация</Link>
             </Col>
         </Row>
     )
 
     const getUserNavbar = () => (
         <Row id="navbar-row" style={{ display: "flex", marginTop: "47px" }}>
-            <Col style={{ width: "10%", marginLeft: "30px", fontSize:"28px", marginTop: "-8px"}}>
-                <Link className="navbar-button" to="/">👥</Link>
+            <Col style={{ display: "flex", width: "70%", marginLeft: "30px", fontSize:"28px", marginTop: "-8px", gap:"20px"}}>
+                {mode == 'light' ?
+                <a className="navbar-switch" >Подробно OFF⬛️</a> :
+                <a className="navbar-switch" >Подробно ON🟩</a> }
+                <Link className="navbar-button" to="/">Правила📑</Link>
+                <a className="navbar-button">Руководствоℹ️</a>
             </Col>
             <Col style={{ width: "20%", marginLeft: "30px", fontSize: "18px" }}>
                 {is_authenticated && <CartButton CurrentID={ CurrentID } />}
-            </Col>
-            <Col style={{ width: "40%", marginLeft: "30px" }}>
-                <Link className="navbar-button" to="/orders">Отправки</Link>
             </Col>
             <Col style={{ width: "30%", marginLeft: "30px" }}>
                 <Link className="navbar-button" to="#" onClick={ handleLogout }>{`${username}: выход`}</Link>
@@ -71,7 +76,13 @@ const Navbar: FC = () => {
     }
 
     return (
-        <Row id="header">
+        <Row id="header"  style={{ 
+            position: 'sticky', 
+            top: 0,
+            zIndex: 1000,
+            background: 'white',
+            width: '100%'
+          }}>
             <HeadTitle />
             <Container id="nav" style={{ paddingLeft: "30px", width: "200%"}}>
                 {getNavbar()}

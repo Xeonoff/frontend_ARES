@@ -4,8 +4,6 @@ import { useQuery } from "react-query";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useSsid } from '../../hooks/useSsid';
-
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import OrderTable from '../../components/OrderTable/OrderTable';
 import Loader from '../../components/Loader/Loader.tsx';
 
@@ -188,9 +186,6 @@ const OrderListPage: FC = () => {
     return (
         <> {loading ? <Loader /> :
         <Container>
-            <Row>
-                <Breadcrumbs pages={[ { link: `/orders`, title: (is_moderator ? 'отправки пользователей' : 'мои отправки') } ]} />
-            </Row>
             <Row style={{ display: "flex" }}>
                 <Col style={{ width: "35%" }}>
                     <h1 className="cart-main-text" style={{ marginTop: "30px", marginLeft: "30px" }}>{is_moderator ? 'Отправки пользователей' : 'Список ваших отправок'}: </h1>

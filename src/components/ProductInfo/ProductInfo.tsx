@@ -2,7 +2,6 @@ import { FC } from 'react'
 import { useAuth } from "../../hooks/useAuth";
 import { useSsid } from '../../hooks/useSsid';
 import axios from "axios";
-import ImageWrapper from '../ImageWrapper/ImageWrapper';
 
 import './ProductInfo.css'
 export interface Param {
@@ -17,7 +16,7 @@ interface Props {
     img: string
 }
 
-const ProductInfo: FC<Props> = ({id, full_name, parameters, img }) => {
+const ProductInfo: FC<Props> = ({id, full_name, parameters}) => {
 
     const { session_id } = useSsid()
     const { is_authenticated } = useAuth()
@@ -35,9 +34,6 @@ const ProductInfo: FC<Props> = ({id, full_name, parameters, img }) => {
         <div className="product">
             <div className="product-info" key={id.toString()}>
                 <h4 className="product-title">{full_name}</h4>
-                <div className="product-image-wrap">
-                    <ImageWrapper src={img} className="product-image" based="/default.jpg"/>
-                </div>
                 <input type="radio" name="radio" id="product-params" defaultChecked />
                 <input type="radio" name="radio" id="product-reviews" />
                 <div className="product-bar">

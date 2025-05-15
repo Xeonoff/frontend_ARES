@@ -5,7 +5,6 @@ import axios from "axios";
 import { useSsid } from "../../hooks/useSsid";
 import { useAuth } from "../../hooks/useAuth";
 import { Col, Container, Row } from "react-bootstrap";
-import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import Loader from '../../components/Loader/Loader.tsx';
 import "./ProductUpdatePage.css"
 
@@ -137,9 +136,6 @@ const ProductUpdatePage: FC = () => {
     return (
         <> {loading ? <Loader /> :
         <Container>
-            <Row>
-                <Breadcrumbs pages={[ { link: window.location.pathname, title: pageTitle } ]} />
-            </Row>
             <h1 className="cart-main-text" style={{ marginLeft: "30px" }}>{pageTitle}</h1>
             <form onSubmit={handleSubmit}>
                 <Container id="product-form">
