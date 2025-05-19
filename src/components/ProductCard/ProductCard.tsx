@@ -21,15 +21,25 @@ interface RuleCardData {
     parsed_content?: any;
 }
 
-const ProductCard: FC<RuleCardData> = ({ name, content, faculty, semester, building, department, parsed_content }) => (
-    <Link className="ruleCard" to={"/products/" + name}><Card className="card">
-        <div className="cardTitleWrap"><pre className="cardTitle"><Card.Text style={{color:"rgba(0,0,0)"}}>{content}</Card.Text></pre></div>
-        <div className="cardTitleWrap"><Card.Title className="cardTitle" style={{color:"rgba(0,0,0)"}}>{faculty}</Card.Title></div>
-        <div className="cardTitleWrap"><Card.Title className="cardTitle" style={{color:"rgba(0,0,0)"}}>{semester}</Card.Title></div>
-        <div className="cardTitleWrap"><Card.Title className="cardTitle" style={{color:"rgba(0,0,0)"}}>{building}</Card.Title></div>
-        <div className="cardTitleWrap"><Card.Title className="cardTitle" style={{color:"rgba(0,0,0)"}}>{department}</Card.Title></div>
-        <div className="cardTitleWrap"><Card.Title className="cardTitle" style={{color:"rgba(0,0,0)"}}>{parsed_content}</Card.Title></div>
-    </Card></Link>
-)
+const ProductCard: FC<RuleCardData> = ({ name, content, faculty, semester, building, department }) => (
+    <Link className="ruleCard" to={"/products/" + name}>
+      <Card className="card">
+        <Card.Body className="card-body">
+          <div>
+            {name}
+          </div>
+          <div className="content-block">
+            <Card.Text className="card-content">{content}</Card.Text>
+          </div>
+          <div className="meta-info">
+            {faculty && <div className="meta-item">{faculty}</div>}
+            {semester && <div className="meta-item"><span className="meta-item-span">Семестр:</span> {semester}</div>}
+            {building && <div className="meta-item"><span className="meta-item-span">Корпус:</span> {building}</div>}
+            {department && <div className="meta-item"><span className="meta-item-span">Кафедра:</span> {department}</div>}
+          </div>
+        </Card.Body>
+      </Card>
+    </Link>
+  )
 
 export default ProductCard

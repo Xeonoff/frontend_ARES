@@ -10,7 +10,7 @@ import Loader from '../../components/Loader/Loader.tsx';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useStore } from 'react-redux';
 import "./ProductListPage.css";
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export interface Product {
     id: number,
@@ -36,15 +36,61 @@ export interface Rule {
 }
 
 interface Response {
-    Constraints: Rule[]
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: Rule[];
 }
 
 const ProductListPage: FC = () => {
-    const [ loading, setLoading ] = useState<boolean> (true)
+    const [searchParams, setSearchParams] = useSearchParams();
+    const initialPage = () => {
+        const pageParam = searchParams.get('page');
+        return pageParam && !isNaN(parseInt(pageParam)) && parseInt(pageParam) > 0 
+            ? parseInt(pageParam) 
+            : 1;
+    };
 
+    const [ loading, setLoading ] = useState<boolean> (true)
+    const [currentPage, setCurrentPage] = useState<number>(initialPage());
+    const [totalPages, setTotalPages] = useState<number>(1);
     const [ response, setResponse ] = useState<Response> ({
-        Constraints: [],
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
     })
+    const [inputPage, setInputPage] = useState<string>(initialPage().toString());
+
+    const updatePage = (newPage: number) => {
+        setCurrentPage(newPage);
+        setInputPage(newPage.toString());
+        searchParams.set('page', newPage.toString());
+        setSearchParams(searchParams);
+    };
+
+    const handlePageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (/^\d*$/.test(value)) { // Разрешаем только числа
+            setInputPage(value);
+        }
+    };
+
+    const handleManualPageChange = () => {
+        const page = parseInt(inputPage);
+        if (page >= 1 && page <= totalPages) {
+            updatePage(page);
+            getFilteredProducts(page);
+        } else {
+            setInputPage(currentPage.toString());
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleManualPageChange();
+        }
+    };
     //@ts-ignore
     const [ searchValue, setSearchValue] = useState<string> (useStore().getState().productFilter.searchValue)
 
@@ -55,20 +101,22 @@ const ProductListPage: FC = () => {
 
     is_moderator && navigate('/')
 
-    const getFilteredProducts = async () => {
+    const getFilteredProducts = async (page: number = 1) => {
             try {
-                const { data } = await axios(`/api/receivers/`, {
+                const { data } = await axios(`/api/constraints/`, {
                     method: "GET",
                     headers: {
                         'authorization': session_id
                     },
                     params: {
-                        title: searchValue,
-                        status: 1
+                        query: searchValue,
+                        page: page,
+                        page_size: 10
                     },
                     signal: AbortSignal.timeout(1000)
                 })
                 setResponse(data)
+                setTotalPages(Math.ceil(data.count / 10));
                 dispatch(updateSearchValue(searchValue))
             } catch (error) {
                 console.log(searchValue)
@@ -76,23 +124,74 @@ const ProductListPage: FC = () => {
             }
     }
 
+    const handleNextPage = () => {
+        if (response.next) {
+            const newPage = currentPage + 1;
+            updatePage(newPage);
+            getFilteredProducts(newPage);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (response.previous) {
+            const newPage = currentPage - 1;
+            updatePage(newPage);
+            getFilteredProducts(newPage);
+        }
+    };
 
     useEffect(() => {
-        getFilteredProducts().then(() => {
+        getFilteredProducts(currentPage).then(() => {
             setLoading(false)
         }).catch((error) => {
             console.log(error)
             setLoading(false)
         })
-    }, [dispatch])
+    }, [dispatch, currentPage, searchValue])
 
     return (
         <> {loading ? <Loader /> :
         <Container>
             <Row style={is_authenticated ? { display: 'flex', position: 'relative', top: '-25px' } : {display: 'flex'}}>
                 <Col style={{ marginBottom: "30px", marginLeft: "10px" }}>
+                    <div className="pagination-container">
+                        <button 
+                            onClick={handlePrevPage}
+                            disabled={!response.previous}
+                            className="pagination-button"
+                        >
+                            Назад
+                        </button>
+                        
+                        <div className="page-controls">
+                            <input
+                                type="text"
+                                className="page-input"
+                                value={inputPage}
+                                onChange={handlePageInput}
+                                onKeyPress={handleKeyPress}
+                            />
+                            <span className="page-info">
+                                из {totalPages}
+                            </span>
+                            <button 
+                                onClick={handleManualPageChange}
+                                className="pagination-button go-button"
+                            >
+                                Перейти
+                            </button>
+                        </div>
+
+                        <button 
+                            onClick={handleNextPage}
+                            disabled={!response.next}
+                            className="pagination-button"
+                        >
+                            Вперед
+                        </button>
+                    </div>
                     <div id="box">
-                        {response.Constraints.map((constraint: Rule, index) => (
+                        {response.results.map((constraint: Rule, index) => (
                             <div key = {index}>
                                 <ProductCard key={constraint.name}
                                     name = {constraint.name}
@@ -106,6 +205,7 @@ const ProductListPage: FC = () => {
                             </div> 
                         ))}
                     </div>
+                    
                 </Col>
             </Row>
         </Container>

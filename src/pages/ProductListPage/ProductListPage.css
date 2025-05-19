@@ -1,11 +1,12 @@
 #box {
     display: flex;
     flex-wrap: wrap;
-    height: max-content;
-    padding-bottom: 30px;
-    position: relative;
-    top: -35px;
-}
+    justify-content: flex-start; 
+    gap: 3% 3%;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
 .main-add-button {
     position: relative;
@@ -56,4 +57,72 @@
 
 .main-add-button:hover {
     background-color: #7c7acc;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 15px 0;
+}
+
+.pagination-button {
+    font-family: 'Inter', sans-serif;
+    padding: 8px 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Пагинация */
+.page-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-input {
+    width: 50px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.page-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,.25);
+}
+
+.go-button {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.go-button:hover:not(:disabled) {
+    background-color: #0056b3;
+    border-color: #0056b3;
 }
