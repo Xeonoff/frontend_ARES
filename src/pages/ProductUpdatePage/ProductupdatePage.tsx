@@ -1,6 +1,6 @@
+// ProductUpdatePage.tsx
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
-import { Product } from "../ProductListPage/ProductListPage";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSsid } from "../../hooks/useSsid";
 import { useAuth } from "../../hooks/useAuth";
@@ -8,228 +8,231 @@ import { Col, Container, Row } from "react-bootstrap";
 import Loader from '../../components/Loader/Loader.tsx';
 import "./ProductUpdatePage.css"
 
-export interface ProductFormData {
-    full_name: string,
-    email: string,
-    phone: string,
-    sex: string,
-    bdate: string,
-    img: string
+interface RuleFormData {
+    name: string;
+    content: string;
+    faculty?: string;
+    semester?: number;
+    building?: string;
+    department?: string;
+    steps: Array<{ keyword: string; text: string }>;
 }
 
-const toFormData = (receiver: Product) => {
-    return {
-        full_name: receiver.full_name,
-        email: receiver.email,
-        phone: receiver.phone,
-        sex: receiver.sex,
-        bdate: receiver.bdate,
-        img: ""
-    }
-}
+const initialFormData: RuleFormData = {
+    name: '',
+    content: '',
+    faculty: '',
+    semester: undefined,
+    building: '',
+    department: '',
+    steps: []
+};
 
-const emptyProduct: Product = {
-    id: -1,
-    full_name: "",
-    img : "",
-    status : "1",
-    bdate : "",
-    sex : 'n',
-    email : "",
-    available_mem : "1024",
-    phone : "",
-    last_modified : ""
-}
+const keywordOptions = ['Дано', 'Когда', 'Тогда', 'И', 'То'];
 
 const ProductUpdatePage: FC = () => {
-    const { id } = useParams()
-    const [ loading, setLoading ] = useState<boolean> (true)
-    const navigate = useNavigate()
-    const { session_id } = useSsid()
-    const { is_moderator } = useAuth()
-    const pageTitle = (id ? 'изменение получателя' : 'добавление получателя')
-    const [ values, setValues ] = useState<ProductFormData> (toFormData(emptyProduct))
-    const [ image, setImage ] = useState<File | undefined> ()
-    const [ uploadedImage, setUploadedImage ] = useState<string | undefined> ()
+    const { name } = useParams();
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const { session_id } = useSsid();
+    const { is_moderator } = useAuth();
+    const [formData, setFormData] = useState<RuleFormData>(initialFormData);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
-    !is_moderator && navigate('/products')
-
-    const getProduct = async () => {
-        const response = await axios(`/api/receivers/${id}/`, { method: "GET" })
-        setValues(toFormData(response.data))
-        setUploadedImage(response.data.image)
-    }
 
     useEffect(() => {
-        id ?
-        getProduct().then(() => {
-            setLoading(false)
-        }).catch((error) => {
-            console.log(error)
-            setLoading(false)
-        })
-        :
-        setLoading(false)
-    }, [])
-    
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        if (name) {
+            const fetchRule = async () => {
+                try {
+                    const response = await axios.get(`/api/constraints/${name}/`);
+                    setFormData({
+                        ...response.data,
+                        steps: response.data.parsed_content?.[0]?.steps || []
+                    });
+                } catch (error) {
+                    console.error('Error fetching rule:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchRule();
+        } else {
+            setLoading(false);
+        }
+    }, [name]);
+
+    const validateForm = () => {
+        const newErrors: Record<string, string> = {};
+        if (!formData.name) newErrors.name = 'Название обязательно';
+        if (formData.steps.length === 0) newErrors.steps = 'Добавьте хотя бы один шаг';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setValues((prevValues) => ({
-            ...prevValues,
-            [name]: value,
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleStepChange = (index: number, field: string, value: string) => {
+        const newSteps = [...formData.steps];
+        newSteps[index] = { ...newSteps[index], [field]: value };
+        setFormData(prev => ({ ...prev, steps: newSteps }));
+    };
+
+    const addStep = () => {
+        setFormData(prev => ({
+            ...prev,
+            steps: [...prev.steps, { keyword: 'Дано', text: '' }]
         }));
     };
-    
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const file = e.target.files[0]
-            setImage(file ? file : undefined)
-            setUploadedImage(URL.createObjectURL(file))
-            setValues((prevValues) => ({
-                ...prevValues,
-                ['file_extension']: file.name.split('.').pop()
-            }));
-        }
+
+    const removeStep = (index: number) => {
+        setFormData(prev => ({
+            ...prev,
+            steps: prev.steps.filter((_, i) => i !== index)
+        }));
     };
 
-    const sendData = async () => {
-        id ?
-        await axios(`/api/receivers/${id}/`, {
-            method: 'PUT',
-            data: values,
-            headers: {
-                'content-type': 'multipart/form-data',
-                'authorization': session_id
-            }
-        })
-        :
-        await axios(`/api/receivers/`, {
-            method: 'POST',
-            data: values,
-            headers: {
-                'content-type': 'multipart/form-data',
-                'authorization': session_id
-            }
-        })
-    }
+    const generateGherkinContent = () => {
+        let content = `Сценарий: ${formData.name}\n`;
+        formData.steps.forEach(step => {
+            content += `    ${step.keyword} ${step.text}\n`;
+        });
+        return content;
+    };
 
-    const sendForm = async () => {
-        if (image) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                values.img = btoa(reader.result as string)
-                sendData()
-            }
-            reader.readAsBinaryString(image)
-        } else {
-            sendData()
-        }
-        navigate('/products')
-        console.log(values)
-    }
-
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        sendForm();
+        if (!validateForm()) return;
+
+        const dataToSend = {
+            ...formData,
+            content: generateGherkinContent()
+        };
+
+        try {
+            if (name) {
+                await axios.put(`/api/constraints/${name}/`, dataToSend, {
+                    //headers: { 'Authorization': session_id }
+                });
+            } else {
+                await axios.post('/api/constraints/', dataToSend, {
+                    //headers: { 'Authorization': session_id }
+                });
+            }
+            navigate('/products');
+        } catch (error) {
+            console.error('Error saving rule:', error);
+        }
     };
+
+    if (loading) return <Loader />;
 
     return (
-        <> {loading ? <Loader /> :
         <Container>
-            <h1 className="cart-main-text" style={{ marginLeft: "30px" }}>{pageTitle}</h1>
-            <form onSubmit={handleSubmit}>
-                <Container id="product-form">
-                    <Row style={{ display: "flex" }}>
-                        <Col id="product-form-main" style={{ width: "48%" }}>
-                            <Row>
-                                <h2>Основные данные</h2>
-                            </Row>
-                            <Row>
-                                <div className="left-column"><label htmlFor="title">Имя</label></div>
-                                <textarea
-                                    id="full_name"
-                                    name="full_name"
-                                    value={values.full_name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Row>
-                            <Row>
-                                <div className="left-column"><label htmlFor="price">Email</label></div>
-                                <input
-                                    type="string"
-                                    id="email"
-                                    name="email"
-                                    value={values.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Row>
-                            <Row>
-                                <div className="left-column"><label htmlFor="cnt">Телефонный номер</label></div>
-                                <input
-                                    type="string"
-                                    id="phone"
-                                    name="phone"
-                                    value={values.phone}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Row>
-                            <Row>
-                                <div className="left-column"><label htmlFor="type">Дата  рождения</label></div>
-                                <input
-                                    type="date"
-                                    id="bdate"
-                                    name="bdate"
-                                    value={values.bdate}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Row>
-                            <Row>
-                                <h2>{'Пол (необязательно)'}</h2>
-                            </Row>
-                            <Row>
-                                <div className="left-column"><label htmlFor="param_sex">Пол</label></div>
-                                <select
-                                    id="sex"
-                                    name="sex"
-                                    value={values.sex}
-                                    onChange={handleChange}
-                                ><option value={values.sex}>{values.sex}</option>
-                                <option value="m">m</option>
-                                <option value="f">f</option>
-                                <option value="n">n</option>
-                                </select>
-                            </Row>
-                        </Col>
-                        <Col id="product-form-image" style={{ width: "48%" }}>
-                            <Row>
-                                <h2>Изображение</h2>
-                            </Row>
-                            <Row style={{ flexDirection: "column" }}>
-                                <input
-                                    type="file"
-                                    id="image"
-                                    name="image"
-                                    onChange={handleFileChange}
-                                    style={{ gap: "10px" }}
-                                />
-                                <div style={{ width: "80%" }}>
-                                    <img src={uploadedImage} alt="" style={{ width: "100%", border: "1px solid grey", borderRadius: "10px", marginTop: "30px" }} />
-                                </div>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <button id="product-form-submit-button" type="submit">Сохранить</button>
-                    </Row>
-                </Container>  
+            <h1 className="page-title">
+                {name ? 'Редактирование правила' : 'Создание нового правила'}
+            </h1>
+            
+            <form onSubmit={handleSubmit} className="rule-form">
+                <div className="form-section">
+                    <label>
+                        Название сценария:
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className={errors.name ? 'error' : ''}
+                        />
+                        {errors.name && <span className="error-message">{errors.name}</span>}
+                    </label>
+                </div>
+
+                <div className="form-section">
+                    <h3>Шаги сценария:</h3>
+                    {formData.steps.map((step, index) => (
+                        <div key={index} className="step-block">
+                            <select
+                                value={step.keyword}
+                                onChange={(e) => handleStepChange(index, 'keyword', e.target.value)}
+                            >
+                                {keywordOptions.map(option => (
+                                    <option key={option} value={option}>{option}</option>
+                                ))}
+                            </select>
+                            <input
+                                type="text"
+                                value={step.text}
+                                onChange={(e) => handleStepChange(index, 'text', e.target.value)}
+                                placeholder="Описание шага"
+                            />
+                            <button
+                                type="button"
+                                className="remove-step"
+                                onClick={() => removeStep(index)}
+                            >
+                                ×
+                            </button>
+                        </div>
+                    ))}
+                    <button type="button" onClick={addStep} className="add-step">
+                        Добавить шаг
+                    </button>
+                    {errors.steps && <span className="error-message">{errors.steps}</span>}
+                </div>
+
+                <div className="form-section grid-columns">
+                    <label>
+                        Факультет:
+                        <input
+                            type="text"
+                            name="faculty"
+                            value={formData.faculty}
+                            onChange={handleInputChange}
+                        />
+                    </label>
+                    
+                    <label>
+                        Семестр:
+                        <input
+                            type="number"
+                            name="semester"
+                            value={formData.semester || ''}
+                            onChange={handleInputChange}
+                            min="1"
+                            max="12"
+                        />
+                    </label>
+                    
+                    <label>
+                        Корпус:
+                        <input
+                            type="text"
+                            name="building"
+                            value={formData.building}
+                            onChange={handleInputChange}
+                        />
+                    </label>
+                    
+                    <label>
+                        Кафедра:
+                        <input
+                            type="text"
+                            name="department"
+                            value={formData.department}
+                            onChange={handleInputChange}
+                        />
+                    </label>
+                </div>
+
+                <button type="submit" className="submit-button">
+                    {name ? 'Сохранить изменения' : 'Создать правило'}
+                </button>
             </form>
         </Container>
-        }</>
-    )
-}
+    );
+};
 
-export default ProductUpdatePage
+export default ProductUpdatePage;

@@ -6,6 +6,7 @@ import orderFilterReducer from "./orderFilterSlice"
 import productFilterReducer from "./productFilterSlice"
 import storage from 'redux-persist/lib/storage'
 import { combineReducers } from 'redux'
+import detailedViewReducer from './detailedViewSlice'
 
 const persistConfig = {
     key: 'root',
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     user: authReducer,
     productFilter: productFilterReducer,
     orderFilter: orderFilterReducer,
-    button: buttonReducer
+    button: buttonReducer,
+    detailedView: detailedViewReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -26,3 +28,5 @@ export const store = configureStore({
 })
 
 export const persistor = persistStore(store)
+
+export type RootState = ReturnType<typeof rootReducer>

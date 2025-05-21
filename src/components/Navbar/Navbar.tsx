@@ -5,12 +5,19 @@ import HeadTitle from '../HeadTitle/HeadTitle.tsx';
 import CartButton from '../../components/CartButton/CartButton.tsx';
 import { Container, Row, Col} from 'react-bootstrap'
 import "./Navbar.css"
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { RootState } from '../../store/store.ts' // Убедитесь, что путь правильный
+import { toggleDetailed } from '../../store/detailedViewSlice'
 
 const Navbar: FC = () => {
     const { is_authenticated, username, is_moderator, logout } = useAuth()
     const navigate = useNavigate()
-    let mode = "light"
+    const dispatch = useDispatch()
+    const isDetailed = useSelector((state: RootState) => state.detailedView.isDetailed)
+
+    const handleToggleDetailed = () => {
+        dispatch(toggleDetailed())
+    }
     //@ts-ignore
     const CurrentID = useSelector((state) => state.button.current_id);
     const handleLogout = async () => {
@@ -21,11 +28,11 @@ const Navbar: FC = () => {
     const getGuestNavbar = () => (
         <Row id="navbar-row" style={{ display: "flex", marginTop: "40px"}}>
             <Col style={{display: "flex", width: "70%", marginLeft: "30px", fontSize:"28px", gap:"20px" }}>
-                {mode == 'light' ?
-                <a className="navbar-switch" >Подробно OFF⬛️</a> :
-                <a className="navbar-switch" >Подробно ON🟩</a> }
+                <a className="navbar-switch" onClick={handleToggleDetailed}>
+                    {isDetailed ? 'Подробно ON🟩' : 'Подробно OFF⬛️'}
+                </a>
                 <Link className="navbar-button" to="/">Правила📑</Link>
-                <a className="navbar-button">Руководствоℹ️</a>
+                <Link className="navbar-button" to="products/create">Создать правило📝</Link>
             </Col>
             <Col style={{ flex: 1, marginLeft: "30px", display: "flex",flexDirection: "column", alignItems: "flex-start", textAlign: "center", marginRight: "2px", marginBottom: "2px"}}>
                 <Link className="navbar-button" to="/login" style={{ width: "90%", marginBottom: "3px"}}>Вход</Link>
@@ -36,11 +43,11 @@ const Navbar: FC = () => {
     const getUserNavbar = () => (
         <Row id="navbar-row" style={{ display: "flex", marginTop: "47px" }}>
             <Col style={{ display: "flex", width: "70%", marginLeft: "30px", fontSize:"28px", marginTop: "-8px", gap:"20px"}}>
-                {mode == 'light' ?
-                <a className="navbar-switch" >Подробно OFF⬛️</a> :
-                <a className="navbar-switch" >Подробно ON🟩</a> }
+                <a className="navbar-switch" onClick={handleToggleDetailed}>
+                    {isDetailed ? 'Подробно ON🟩' : 'Подробно OFF⬛️'}
+                </a>
                 <Link className="navbar-button" to="/">Правила📑</Link>
-                <a className="navbar-button">Руководствоℹ️</a>
+                <Link className="navbar-button" to="products/create">Создать правило📝</Link>
             </Col>
             <Col style={{ width: "20%", marginLeft: "30px", fontSize: "18px" }}>
                 {is_authenticated && <CartButton CurrentID={ CurrentID } />}

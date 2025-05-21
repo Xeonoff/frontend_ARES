@@ -60,6 +60,13 @@ const ProductListPage: FC = () => {
         previous: null,
         results: [],
     })
+    const [filters, setFilters] = useState({
+        name: '',
+        faculty: '',
+        semester: undefined,
+        building: '',
+        department: ''
+    });
     const [inputPage, setInputPage] = useState<string>(initialPage().toString());
 
     const updatePage = (newPage: number) => {
@@ -103,18 +110,26 @@ const ProductListPage: FC = () => {
 
     const getFilteredProducts = async (page: number = 1) => {
             try {
+                const page_size = '10'
+                const requestParams: Record<string, string> = {
+                    page: page.toString(),
+                    page_size: page_size
+                };
+
+                if (filters.name) requestParams.name = filters.name;
+                if (filters.faculty) requestParams.faculty = filters.faculty;
+                if (filters.semester) requestParams.semester = filters.semester;
+                if (filters.building) requestParams.building = filters.building;
+                if (filters.department) requestParams.department = filters.department;
+
                 const { data } = await axios(`/api/constraints/`, {
                     method: "GET",
                     headers: {
                         'authorization': session_id
                     },
-                    params: {
-                        query: searchValue,
-                        page: page,
-                        page_size: 10
-                    },
+                    params: requestParams,
                     signal: AbortSignal.timeout(1000)
-                })
+                });
                 setResponse(data)
                 setTotalPages(Math.ceil(data.count / 10));
                 dispatch(updateSearchValue(searchValue))
@@ -124,6 +139,31 @@ const ProductListPage: FC = () => {
             }
     }
 
+    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFilters(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleFilterSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setCurrentPage(1);
+        getFilteredProducts(1);
+    };
+
+    const resetFilters = () => {
+        setFilters({
+            name: '',
+            faculty: '',
+            semester: undefined,
+            building: '',
+            department: ''
+        });
+        setCurrentPage(1);
+        getFilteredProducts(1);
+    };
     const handleNextPage = () => {
         if (response.next) {
             const newPage = currentPage + 1;
@@ -147,11 +187,81 @@ const ProductListPage: FC = () => {
             console.log(error)
             setLoading(false)
         })
-    }, [dispatch, currentPage, searchValue])
+    }, [dispatch, currentPage, searchValue, filters])
 
     return (
         <> {loading ? <Loader /> :
         <Container>
+            <Row className="filters-row">
+                <Col md={12}>
+                    <form onSubmit={handleFilterSubmit} className="filters-form">
+                        <div className="filter-group">
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Поиск по названию"
+                                value={filters.name}
+                                onChange={handleFilterChange}
+                            />
+                        </div>
+                        
+                        <div className="filter-group">
+                            <input
+                                type="text"
+                                name="faculty"
+                                placeholder="Факультет"
+                                value={filters.faculty}
+                                onChange={handleFilterChange}
+                            />
+                        </div>
+
+                        <div className="filter-group">
+                            <input
+                                type="number"
+                                name="semester"
+                                placeholder="Семестр"
+                                value={filters.semester}
+                                onChange={handleFilterChange}
+                                min="1"
+                                max="12"
+                            />
+                        </div>
+
+                        <div className="filter-group">
+                            <input
+                                type="text"
+                                name="building"
+                                placeholder="Корпус"
+                                value={filters.building}
+                                onChange={handleFilterChange}
+                            />
+                        </div>
+
+                        <div className="filter-group">
+                            <input
+                                type="text"
+                                name="department"
+                                placeholder="Кафедра"
+                                value={filters.department}
+                                onChange={handleFilterChange}
+                            />
+                        </div>
+
+                        <div className="filter-actions">
+                            <button type="submit" className="filter-button">
+                                Применить фильтры
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={resetFilters}
+                                className="filter-button reset"
+                            >
+                                Сбросить
+                            </button>
+                        </div>
+                    </form>
+                </Col>
+            </Row>
             <Row style={is_authenticated ? { display: 'flex', position: 'relative', top: '-25px' } : {display: 'flex'}}>
                 <Col style={{ marginBottom: "30px", marginLeft: "10px" }}>
                     <div className="pagination-container">
