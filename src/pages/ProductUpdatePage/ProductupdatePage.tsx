@@ -35,7 +35,7 @@ const ProductUpdatePage: FC = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { session_id } = useSsid();
-    const { is_moderator } = useAuth();
+    const { isModerator } = useAuth();
     const [formData, setFormData] = useState<RuleFormData>(initialFormData);
     const [errors, setErrors] = useState<Record<string, string>>({});
 

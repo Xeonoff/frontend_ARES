@@ -102,11 +102,10 @@ const ProductListPage: FC = () => {
     const [ searchValue, setSearchValue] = useState<string> (useStore().getState().productFilter.searchValue)
 
     const { session_id } = useSsid()
-    const { is_authenticated, is_moderator } = useAuth()
+    const { isAuthenticated, isModerator } = useAuth()
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    is_moderator && navigate('/')
 
     const getFilteredProducts = async (page: number = 1) => {
             try {
@@ -262,8 +261,9 @@ const ProductListPage: FC = () => {
                     </form>
                 </Col>
             </Row>
-            <Row style={is_authenticated ? { display: 'flex', position: 'relative', top: '-25px' } : {display: 'flex'}}>
+            <Row style={isAuthenticated ? { display: 'flex', position: 'relative', top: '-25px' } : {display: 'flex'}}>
                 <Col style={{ marginBottom: "30px", marginLeft: "10px" }}>
+                    {isAuthenticated ?
                     <div className="pagination-container">
                         <button 
                             onClick={handlePrevPage}
@@ -300,6 +300,8 @@ const ProductListPage: FC = () => {
                             Вперед
                         </button>
                     </div>
+                     : <></>}
+                     {isAuthenticated ?
                     <div id="box">
                         {response.results.map((constraint: Rule, index) => (
                             <div key = {index}>
@@ -315,6 +317,7 @@ const ProductListPage: FC = () => {
                             </div> 
                         ))}
                     </div>
+                    : <div className='page-info'> Авторизуйтесь в системе</div>}
                     
                 </Col>
             </Row>

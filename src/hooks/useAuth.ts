@@ -1,111 +1,67 @@
+// useAuth.tsx
 import { useDispatch, useSelector } from 'react-redux';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import { RootState } from "../store/store";
+import { setAuthData, clearAuth } from "../store/authSlice";
 
-import { useSsid } from './useSsid';
-import { updateUser, cleanUser } from "../store/authSlice";
-
+const OAUTH_REDIRECT_URI = `${window.location.origin}/oauth-callback`;
+const OAUTH_AUTHORIZE_URL = `https://science.iu5.bmstu.ru/sso/authorize?response_type=code&redirect_uri=${OAUTH_REDIRECT_URI}`;
 
 export function useAuth() {
-    //@ts-ignore
-    const { is_authenticated, is_moderator, user_id, username } = useSelector(state => state.user)
-    const { session_id, setSsid, resetSsid } = useSsid()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { token, user } = useSelector((state: RootState) => state.user);
+    const isAuthenticated = !!token;
+    const isModerator = user?.is_staff || false;
 
-    const setUser = (value: any) => {
-        dispatch(updateUser(value))
-    }
+    const initiateOAuth = () => {
+        const authUrl = new URL(OAUTH_AUTHORIZE_URL);
+        authUrl.searchParams.append('response_type', 'code');
+        window.location.href = authUrl.toString();
+    };
 
-    const resetUser = () => {
-        dispatch(cleanUser())
-    }
-
-    const logout = async () => {
+    const handleOAuthCallback = async (code: string) => {
         try {
-            const response = await axios(`/api/accounts/logout/`, {
-                method: "POST",
-                headers: {
-                    'authorization': session_id
-                }
-            })
+            const response = await axios.post('/api/auth/oauth/', {
+                code,
+                redirect_uri: OAUTH_REDIRECT_URI
+            });
 
-            if (response.status == 200) {
-                resetSsid()
-                resetUser()
-            }
+            const { access_token, user } = response.data;
+            dispatch(setAuthData({ token: access_token, user }));
+            navigate('/');
         } catch (error) {
-            console.log("Что-то пошло не так")
+            console.error('OAuth error:', error);
+            dispatch(clearAuth());
         }
-    }
+    };
 
-    const login = async (formData: any) => {
-        const response = await axios(`/api/accounts/login/`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            data: formData as FormData
-        })
+    const logout = () => {
+        dispatch(clearAuth());
+        navigate('/login');
+    };
 
-        if (response.status == 201) {
-            setSsid(response.data['session_id'])
-
-            const data = {
-                is_authenticated: true,
-                is_moderator: response.data["is_moderator"],
-                user_id: response.data["id"],
-                username: response.data["username"],
+    const checkAuth = async () => {
+        if (token) {
+            try {
+                await axios.get('/api/auth/profile/', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } catch (error) {
+                dispatch(clearAuth());
             }
-
-            setUser(data)
-            return true
         }
-        return false
-    }
-
-
-    const auth = async () => {
-        const response = await axios(`/api/accounts/check/`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'authorization': session_id
-            },
-        })
-
-        if (response.status == 200) {
-            const data = {
-                is_authenticated: true,
-                is_moderator: response.data["is_moderator"],
-                user_id: response.data["id"],
-                username: response.data["username"],
-            }
-
-            setUser(data)
-            return true
-        }
-        return false
-    }
-
-    const register = async (formData: any) => {
-        const response = await axios(`/api/users/`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            data: formData as FormData
-        })
-        return response
-    }
+    };
 
     return {
-        is_authenticated,
-        is_moderator,
-        user_id,
-        username,
-        setUser,
+        user,
+        token,
+        isAuthenticated,
+        isModerator,
+        initiateOAuth,
+        handleOAuthCallback,
         logout,
-        login,
-        auth,
-        register
-    }
+        checkAuth
+    };
 }

@@ -1,31 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
-    user_id: -1,
-    username: "",
-    is_authenticated: false,
-    is_moderator: false
+interface User {
+    id: number;
+    username: string;
+    first_name: string;
+    last_name: string;
+    is_staff: boolean;
 }
 
+interface AuthState {
+    token: string | null;
+    user: User | null;
+}
+
+const initialState: AuthState = {
+    token: localStorage.getItem('oauth_token'),
+    user: JSON.parse(localStorage.getItem('oauth_user') || 'null')
+};
+
 const authSlice = createSlice({
-    name: 'user',
-    initialState: initialState,
+    name: 'auth',
+    initialState,
     reducers: {
-        updateUser: (state, action) => {
-            state.is_authenticated = action.payload.is_authenticated
-            state.is_moderator = action.payload.is_moderator
-            state.user_id = action.payload.pk
-            state.username = action.payload.username
+        setAuthData: (state, action: PayloadAction<{ token: string; user: User }>) => {
+            state.token = action.payload.token;
+            state.user = action.payload.user;
+            localStorage.setItem('oauth_token', action.payload.token);
+            localStorage.setItem('oauth_user', JSON.stringify(action.payload.user));
         },
-        cleanUser: (state) => {
-            state.is_authenticated = false
-            state.is_moderator = false
-            state.user_id = -1
-            state.username = ""
+        clearAuth: (state) => {
+            state.token = null;
+            state.user = null;
+            localStorage.removeItem('oauth_token');
+            localStorage.removeItem('oauth_user');
         }
     }
-})
+});
 
-export const { updateUser, cleanUser } = authSlice.actions
-
-export default authSlice.reducer
+export const { setAuthData, clearAuth } = authSlice.actions;
+export default authSlice.reducer;

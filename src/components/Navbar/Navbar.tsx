@@ -2,7 +2,6 @@ import { FC } from 'react'
 import { useNavigate, Link} from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import HeadTitle from '../HeadTitle/HeadTitle.tsx';
-import CartButton from '../../components/CartButton/CartButton.tsx';
 import { Container, Row, Col} from 'react-bootstrap'
 import "./Navbar.css"
 import { useSelector,useDispatch } from 'react-redux';
@@ -10,7 +9,7 @@ import { RootState } from '../../store/store.ts' // Убедитесь, что �
 import { toggleDetailed } from '../../store/detailedViewSlice'
 
 const Navbar: FC = () => {
-    const { is_authenticated, username, is_moderator, logout } = useAuth()
+    const { isAuthenticated, isModerator, user, initiateOAuth, logout } = useAuth();
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const isDetailed = useSelector((state: RootState) => state.detailedView.isDetailed)
@@ -32,10 +31,9 @@ const Navbar: FC = () => {
                     {isDetailed ? 'Подробно ON🟩' : 'Подробно OFF⬛️'}
                 </a>
                 <Link className="navbar-button" to="/">Правила📑</Link>
-                <Link className="navbar-button" to="products/create">Создать правило📝</Link>
             </Col>
             <Col style={{ flex: 1, marginLeft: "30px", display: "flex",flexDirection: "column", alignItems: "flex-start", textAlign: "center", marginRight: "2px", marginBottom: "2px"}}>
-                <Link className="navbar-button" to="/login" style={{ width: "90%", marginBottom: "3px"}}>Вход</Link>
+                <a className="navbar-button" onClick={initiateOAuth} style={{ width: "90%", marginBottom: "3px"}}>Вход</a>
             </Col>
         </Row>
     )
@@ -49,11 +47,8 @@ const Navbar: FC = () => {
                 <Link className="navbar-button" to="/">Правила📑</Link>
                 <Link className="navbar-button" to="products/create">Создать правило📝</Link>
             </Col>
-            <Col style={{ width: "20%", marginLeft: "30px", fontSize: "18px" }}>
-                {is_authenticated && <CartButton CurrentID={ CurrentID } />}
-            </Col>
             <Col style={{ width: "30%", marginLeft: "30px" }}>
-                <Link className="navbar-button" to="#" onClick={ handleLogout }>{`${username}: выход`}</Link>
+                <Link className="navbar-button" to="#" onClick={ handleLogout }>{`${user?.first_name} ${user?.username}: выход`}</Link>
             </Col>
         </Row>
     )
@@ -67,15 +62,15 @@ const Navbar: FC = () => {
                 <Link className="navbar-button" to="/orders">Отправки</Link>
             </Col>
             <Col style={{ width: "30%", marginLeft: "30px" }}>
-                <Link className="navbar-button" to="#" onClick={ handleLogout }>{`${username}: выход`}</Link>
+                <Link className="navbar-button" to="#" onClick={ handleLogout }>{`${user?.first_name} ${user?.username}: выход`}</Link>
             </Col>
         </Row>
     )
 
     const getNavbar = () => {
-        if (!is_authenticated) {
+        if (!isAuthenticated) {
             return getGuestNavbar()
-        } else if (!is_moderator) {
+        } else if (!isModerator) {
             return getUserNavbar()
         } else {
             return getModerNavbar()

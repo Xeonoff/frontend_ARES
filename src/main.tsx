@@ -4,10 +4,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import { FC } from "react";
 import ProductListPage from "./pages/ProductListPage/ProductListPage.tsx";
-import LoginPage from "./pages/LoginPage/LoginPage.tsx";
-import OrderListPage from "./pages/OrderListPage/OrderListPage.tsx";
-import OrderPage from "./pages/OrderPage/OrderPage.tsx";
 import ProductUpdatePage from "./pages/ProductUpdatePage/ProductupdatePage.tsx";
+import OAuthCallback from "./pages/OAuthCallback/OAuthCallback.tsx";
 
 import Navbar from "./components/Navbar/Navbar.tsx";
 import { PersistGate } from 'redux-persist/integration/react';
@@ -35,10 +33,8 @@ const App: FC = () => {
                     <Route path="products/"     element={ <ProductListPage /> } />
                     <Route path="products/:name" element={<ProductUpdatePage />} />
                     <Route path="products/create" element={<ProductUpdatePage />} />
-                    <Route path="login/"        element={ <LoginPage /> } />
-                    <Route path="orders/"       element={ <OrderListPage /> } />
-                    <Route path="orders/:id"    element={ <OrderPage /> } />
-                    <Route path="products/:id/update/"  element={ <ProductUpdatePage /> } />
+                    <Route path="oauth-callback/" element={<OAuthCallback />} />
+                    <Route path="oauth-callback/" element={<OAuthCallback />} />
                     <Route path="products/create/"      element={ <ProductUpdatePage /> } />
                 </Routes>
             </Row>
