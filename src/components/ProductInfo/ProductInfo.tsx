@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import { useAuth } from "../../hooks/useAuth";
 import { useSsid } from '../../hooks/useSsid';
 import axios from "axios";
 
@@ -19,7 +18,6 @@ interface Props {
 const ProductInfo: FC<Props> = ({id, full_name, parameters}) => {
 
     const { session_id } = useSsid()
-    const { is_authenticated } = useAuth()
 
     const addToCart = async (participants_id: number) => {
         await axios(`/api/receivers/${participants_id}/`, {
@@ -52,8 +50,7 @@ const ProductInfo: FC<Props> = ({id, full_name, parameters}) => {
                 </table>
             </div>
             <div className="product-price-card">
-                {is_authenticated ? <button className="product-to-cart-green" type="button" onClick={ () => addToCart(id) }>➕</button> : <button className="product-to-cart-grey" type="button">➕</button>}
-                {!is_authenticated  && <h5 className="help-text">Авторизуйтесь, чтобы добавить получателя</h5>}
+                <button className="product-to-cart-green" type="button" onClick={ () => addToCart(id) }>➕</button> : <button className="product-to-cart-grey" type="button">➕</button>
             </div>
         </div>
     )

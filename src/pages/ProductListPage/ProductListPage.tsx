@@ -10,7 +10,7 @@ import Loader from '../../components/Loader/Loader.tsx';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useStore } from 'react-redux';
 import "./ProductListPage.css";
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams} from 'react-router-dom';
 
 export interface Product {
     id: number,
@@ -102,9 +102,8 @@ const ProductListPage: FC = () => {
     const [ searchValue, setSearchValue] = useState<string> (useStore().getState().productFilter.searchValue)
 
     const { session_id } = useSsid()
-    const { isAuthenticated, isModerator } = useAuth()
+    const { isAuthenticated} = useAuth()
     const dispatch = useDispatch()
-    const navigate = useNavigate()
 
 
     const getFilteredProducts = async (page: number = 1) => {
