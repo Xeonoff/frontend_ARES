@@ -1,0 +1,14 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(315deg, rgb(110, 156, 255) 3%, rgb(127, 187, 211) 38%, rgb(213, 240, 255) 68%, rgb(255, 255, 255) 98%);
+    background-size: 150% 150%;
+    background-attachment: fixed;
+}
+
+#header {
+    margin: 1%;
+    display: flex;
+    border-radius: 50px;
+    background-color: rgb(246, 221, 221); 
+}
